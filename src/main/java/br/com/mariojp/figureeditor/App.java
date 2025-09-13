@@ -15,7 +15,19 @@ public class App {
 
             DrawingPanel panel = new DrawingPanel();
 
+            JToolBar toolBar = new JToolBar();
+            JButton undoButton = new JButton("Desfazer");
+            JButton redoButton = new JButton("Refazer");
+
+            toolBar.add(undoButton);
+            toolBar.add(redoButton);
+            toolBar.setFloatable(false);
+
+            undoButton.addActionListener(e -> panel.undo());
+            redoButton.addActionListener(e -> panel.redo());
+
             frame.setLayout(new BorderLayout());
+            frame.add(toolBar, BorderLayout.NORTH);
             frame.add(panel, BorderLayout.CENTER);
 
             frame.setSize(900, 600);
