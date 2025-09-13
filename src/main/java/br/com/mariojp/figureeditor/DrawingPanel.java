@@ -15,7 +15,7 @@ class DrawingPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_SIZE = 60;
     private final List<Shape> shapes = new ArrayList<>();
-    private Point startDrag = null;
+    private final CommandHistory commandHistory = new CommandHistory();
 
     DrawingPanel() {
         
@@ -25,12 +25,12 @@ class DrawingPanel extends JPanel {
 
         var mouse = new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 1 && startDrag == null) {
+                if (e.getClickCount() == 1 ) {
                     int size = Math.max(Math.min(DEFAULT_SIZE, DEFAULT_SIZE), 10);
                     Shape s =  new Ellipse2D.Double(e.getPoint().x, e.getPoint().y, size, size);
+                    Command command = new AddShapeCommand(DrawingPanel.this, s);
                     //return new Rectangle2D.Double(e.getPoint().x, e.getPoint().y, Math.max(DEFAULT_SIZE, 10), Math.max(DEFAULT_SIZE, 10));
-                    shapes.add(s);
-                    repaint();
+                    commandHistory.execute(command);
                 }
             }
         };
@@ -39,9 +39,19 @@ class DrawingPanel extends JPanel {
 
     }
 
-    void clear() {
-        shapes.clear();
+    void addShape(Shape shape) {
+        shapes.add(shape);
         repaint();
+    }
+    public void removeShape(Shape shape) {
+        shapes.remove(shape);
+        repaint();
+    }
+    void undo(){
+        commandHistory.undo();
+    }
+    void redo(){
+        commandHistory.redo();
     }
 
     @Override protected void paintComponent(Graphics g) {
