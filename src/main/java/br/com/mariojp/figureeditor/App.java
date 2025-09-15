@@ -4,23 +4,28 @@ import javax.swing.*;
 import java.awt.*;
 
 public class App {
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ignored) {}
+        SwingUtilities.invokeLater(App::createAndShow);
+    }
 
-            JFrame frame = new JFrame("Figure Editor — Clique para inserir figuras");
-            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    private static void createAndShow() {
+        setSystemLookAndFeel();
 
-            DrawingPanel panel = new DrawingPanel();
+        JFrame frame = new JFrame("Figure Editor (clique para inserir)");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            frame.setLayout(new BorderLayout());
-            frame.add(panel, BorderLayout.CENTER);
+        DrawingPanel drawing = new DrawingPanel();
+        frame.setContentPane(drawing);
 
-            frame.setSize(900, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+        frame.setSize(new Dimension(800, 600));
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private static void setSystemLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
     }
 }
